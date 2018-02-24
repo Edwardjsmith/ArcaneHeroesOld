@@ -7,12 +7,17 @@ public class gameEntity : MonoBehaviour {
     public float movementSpeed = 50;
     public float jumpForce = 50;
 
-    
+    public GameObject[] Spells;
+    public GameObject staff;
+    public GameObject staff1;
 
-    protected bool grounded = false;
+    public static int spellSelect;
+    public int showSpell;
+
+    public bool grounded = false;
 
     public Transform groundCheck;
-    float groundRadius = 0.2f;
+    protected float groundRadius = 0.2f;
     public LayerMask whatIsGround;
 
     protected float animationTime = 0.4f;
@@ -44,7 +49,12 @@ public class gameEntity : MonoBehaviour {
         grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
     }
 
+   protected IEnumerator ExecuteSpellAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
 
+        fire(Spells[spellSelect], staff.transform, staff1.transform);
+    }
     protected void moveLeft()
     {
         rigid.AddForce(new Vector2(-movementSpeed, 0));
@@ -58,7 +68,7 @@ public class gameEntity : MonoBehaviour {
         rigid.AddForce(new Vector2(0, jumpForce));
     }
 
-    protected void fire(GameObject spell, Transform pos, Transform pos1)
+    public void fire(GameObject spell, Transform pos, Transform pos1)
     {
         if (facingRight == true)
         {

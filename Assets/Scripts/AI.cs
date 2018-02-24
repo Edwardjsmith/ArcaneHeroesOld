@@ -9,16 +9,39 @@ using state;
 
     public class AI : gameEntity
     {
-        public enum AIState
+
+    private static AI _instance;
+
+    public static AI Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new AI();
+            }
+
+            return _instance;
+        }
+    }
+
+    void Awake()
+    {
+        _instance = this;
+    }
+
+    public enum AIState
         {
             idle,
-            chase
+            chase,
+            fire
         }
 
         public int currentState;
         public GameObject player;
         public GameObject attack;
         public Transform attackSpawn;
+        public GameObject spawn;
 
 
         public AIStateMachine<AI> stateMachine { get; set; }
@@ -28,27 +51,28 @@ using state;
             stateMachine = new AIStateMachine<AI>(this);
             stateMachine.ChangeState(idleState.Instance);
             rigid = gameObject.GetComponent<Rigidbody2D>();
+            whatIsGround = LayerMask.GetMask("Water");
+
+
+            spawn.transform.position = transform.position;
 
         }
 
         private void Update()
         {
+
+            grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+
             if (Vector3.Distance(new Vector3(transform.position.x, 0, 0), new Vector3(player.transform.position.x, 0, 0)) <= 10)
             {
                 currentState = (int)AIState.chase;
 
                 facingRight = false;
 
-                if (Vector3.Distance(new Vector3(transform.position.x, 0, 0), new Vector3(player.transform.position.x, 0, 0)) >= 5)
+                
+                if(Vector3.Distance(new Vector3(transform.position.x, 0, 0), new Vector3(player.transform.position.x, 0, 0)) <= 5)
                 {
-                    rigid.AddForce(new Vector2(-movementSpeed, 0));
-                }
-                else
-                {
-
-
-                    attack.SetActive(true);
-                    Instantiate(attack, attackSpawn.transform.position, transform.rotation);
+                    currentState = (int)AIState.fire;
                 }
             }
             else

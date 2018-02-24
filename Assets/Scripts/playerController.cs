@@ -10,12 +10,8 @@ public class playerController : gameEntity
 
     
    // int numberOfSpells;
-    public GameObject[] Spells;
-    public GameObject staff;
-    public GameObject staff1;
-    public static int spellSelect;
-
-    public int showSpell;
+   
+   
 
     public Slider health;
     public Slider mana;
@@ -96,12 +92,7 @@ public class playerController : gameEntity
         changeSpell(spellSelect);
     }
 
-    IEnumerator ExecuteSpellAfterTime(float time)
-    {
-        yield return new WaitForSeconds(time);
 
-        fire(Spells[spellSelect], staff.transform, staff1.transform);
-    }
 
     IEnumerator takeDamageAfter(float time)
     {
@@ -137,14 +128,14 @@ public class playerController : gameEntity
         }
 
 
-        if (grounded == false)
+        /*if (grounded == false)
         {
             rigid.drag = 0;
         }
         else
         {
             rigid.drag = 1;
-        }
+        }*/
 
         
         //Movement, jumping and attacking

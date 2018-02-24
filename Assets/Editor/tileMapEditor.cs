@@ -245,7 +245,7 @@ public class tileMapEditor : Editor
             tile.AddComponent<BoxCollider2D>();
             if (map.pixelsToUnits != 1)
             {
-                tile.GetComponent<BoxCollider2D>().size = map.tileSize / 100;
+                tile.GetComponent<BoxCollider2D>().size = map.tileSize / map.pixelsToUnits;
             }
             else
             {
